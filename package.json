@@ -1,0 +1,22 @@
+{
+  "name": "folder-analyzer",
+  "version": "0.1.0",
+  "description": "application that analyzes folders and files",
+  "main": "main.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jrc356/Folder-Analyzer.git"
+  },
+  "author": "Jon Corbin (jon.corbin8@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jrc356/Folder-Analyzer/issues"
+  },
+  "homepage": "https://github.com/Jrc356/Folder-Analyzer#readme"
+}
