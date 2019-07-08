@@ -7,7 +7,6 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -18,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/Jrc356/Folder-Analyzer/issues"
   },
-  "homepage": "https://github.com/Jrc356/Folder-Analyzer#readme"
+  "homepage": "https://github.com/Jrc356/Folder-Analyzer#readme",
+  "devDependencies": {
+    "electron": "^5.0.6"
+  },
+  "dependencies": {
+    "electron-prebuilt": "^1.4.13"
+  }
 }
