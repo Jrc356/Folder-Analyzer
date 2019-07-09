@@ -59,14 +59,15 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('ready', async () => {
-  if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
-  ) {
-    await installExtensions();
+app.on('activate', () => {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (mainWindow === null) {
+    createWindow();
   }
+});
 
+function createWindow() {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
@@ -99,4 +100,15 @@ app.on('ready', async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+}
+
+app.on('ready', async () => {
+  if (
+    process.env.NODE_ENV === 'development' ||
+    process.env.DEBUG_PROD === 'true'
+  ) {
+    await installExtensions();
+  }
+
+  createWindow();
 });
