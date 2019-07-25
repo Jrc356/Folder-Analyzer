@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
-const nodeConsole = require('console');
-const nConsole = new nodeConsole.Console(process.stdout, process.stderr);
+import PropTypes from 'prop-types';
 
-export class FolderItem extends Component {
+// const nodeConsole = require('console');
+
+// const nConsole = new nodeConsole.Console(process.stdout, process.stderr);
+
+class FolderItem extends Component {
   render() {
-    <p>{this.props.file}</p>;
+    const { file } = this.props;
+    return <p>{file}</p>;
   }
 }
+
+FolderItem.propTypes = {
+  file: PropTypes.string.isRequired
+};
 
 export default FolderItem;

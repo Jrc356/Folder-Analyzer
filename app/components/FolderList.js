@@ -7,39 +7,36 @@ const nodeConsole = require('console');
 const nConsole = new nodeConsole.Console(process.stdout, process.stderr);
 
 class FolderList extends Component {
-  parseMap(map, file) {
+  parseMap(map: Map, file: string) {
     nConsole.log(file);
-    nConsole.log(map);
-    const parsedItems = [];
+    let parsedItems = [];
 
-    for (const key in map.keys()) {
+    map.keys().forEach(key => {
       if (typeof map.get(key) === typeof new Map()) {
         parsedItems = parsedItems.concat(this.parseMap(map.get(key), key));
       } else {
         parsedItems.push(<FolderItem file={file} />);
       }
-    }
+    });
 
     return parsedItems;
   }
 
   render() {
     const { files } = this.props;
-
     const items = [];
-    for (const key of Object.keys(files)) {
-      items.push(this.parseMap(files, key));
-    }
+    Object.values(files).forEach(value => {
+      items.concat(this.parseMap(files, value));
+    });
 
-    nConsole.log(items);
+    // nConsole.log(items);
 
-    // const keys = Object.keys(items);
-    // for(const key in keys){
-    //     nConsole.log(items[key]);
-    // }
-
-    return items.map(item => item);
+    return items.forEach(item => item);
   }
 }
+
+FolderList.propTypes = {
+  files: PropTypes.instanceOf(Map).isRequired
+};
 
 export default FolderList;
