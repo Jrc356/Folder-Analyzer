@@ -1,42 +1,68 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import FolderItem from './FolderItem';
 
-const nodeConsole = require('console');
+const { Console } = require('console');
 
-const nConsole = new nodeConsole.Console(process.stdout, process.stderr);
+const nConsole = new Console(process.stdout, process.stderr);
 
 class FolderList extends Component {
-  parseMap(map: Map, file: string) {
-    nConsole.log(file);
+  parseMap(map) {
     let parsedItems = [];
 
-    map.keys().forEach(key => {
-      if (typeof map.get(key) === typeof new Map()) {
-        parsedItems = parsedItems.concat(this.parseMap(map.get(key), key));
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key of map.keys()) {
+      const value = map.get(key);
+      if (!value.has('path')) {
+        parsedItems = parsedItems.concat(this.parseMap(value));
       } else {
-        parsedItems.push(<FolderItem file={file} />);
+        parsedItems.push(<FolderItem key={key} path={value.get('path')} />);
       }
-    });
+    }
 
     return parsedItems;
   }
 
   render() {
     const { files } = this.props;
-    const items = [];
-    Object.values(files).forEach(value => {
-      items.concat(this.parseMap(files, value));
+    const items = this.parseMap(files);
+
+    items.forEach(element => {
+      nConsole.log(element.props.path);
     });
 
-    // nConsole.log(items);
+    if (items.length === 0) {
+      return null;
+    }
 
-    return items.forEach(item => item);
+    return (
+      <div>
+        <ul>{items}</ul>
+      </div>
+    );
   }
 }
 
+const customPropTypes = {
+  mapRequired(props, propName) {
+    const m = props[propName];
+    if (!m) {
+      return new Error(`Required property ${propName} not supplied`);
+    }
+    if (!(m instanceof Map)) {
+      return new Error('must be a Map');
+    }
+  }
+};
+
 FolderList.propTypes = {
-  files: PropTypes.instanceOf(Map).isRequired
+  // eslint-disable-next-line react/require-default-props
+  files: customPropTypes.mapRequired
+};
+
+const FolderItem = ({ path }) => <li>{path}</li>;
+
+FolderItem.propTypes = {
+  path: PropTypes.string.isRequired
 };
 
 export default FolderList;
