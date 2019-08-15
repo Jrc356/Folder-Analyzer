@@ -49,7 +49,13 @@ class Home extends Component {
   }
 
   static readDirIntoMap(map, dir) {
-    const dirContents = fs.readdirSync(dir);
+    let dirContents;
+    try {
+      dirContents = fs.readdirSync(dir);
+    } catch (exp) {
+      nConsole.log(exp);
+      return;
+    }
 
     Object.values(dirContents).forEach(file => {
       if (!file.startsWith('.')) {
@@ -57,7 +63,14 @@ class Home extends Component {
 
         // TODO stat gives the size of folder itself and not the contents, need to recursive search
         // This is part of next phase anyway so will be implemented there
-        const stat = fs.statSync(dirPath);
+        let stat;
+        try {
+          stat = fs.statSync(dirPath);
+        } catch (exp) {
+          nConsole.log(exp);
+          return;
+        }
+
         if (stat.isDirectory()) {
           Home.addDirToMap(map, dirPath);
         } else if (stat.isFile()) {
@@ -79,15 +92,22 @@ class Home extends Component {
     Object.values(keys).forEach(key => {
       const value = key === '' ? '/' : key;
 
-      if (dict.has(value)) {
-        dict = dict.get(value);
-      } else {
-        dict.set(
-          value,
-          new Map(
-            Object.entries({ stats: Home.createStats(dirPath), path: dirPath })
-          )
-        );
+      try {
+        if (dict.has(value)) {
+          dict = dict.get(value);
+        } else {
+          dict.set(
+            value,
+            new Map(
+              Object.entries({
+                stats: Home.createStats(dirPath),
+                path: dirPath
+              })
+            )
+          );
+        }
+      } catch (exp) {
+        nConsole.log(exp);
       }
     });
   }
